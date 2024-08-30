@@ -12,17 +12,8 @@ RUN yarn build
 
 FROM base as runtime
 
-# Installiere MongoDB von den offiziellen Repositories
-RUN apk add --no-cache --update \
-    && apk add --no-cache bash \
-    && apk add --no-cache curl \
-    && curl -O https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-5.0.6.tgz \
-    && tar -zxvf mongodb-linux-x86_64-5.0.6.tgz \
-    && mv mongodb-linux-x86_64-5.0.6 /usr/local/mongodb \
-    && rm mongodb-linux-x86_64-5.0.6.tgz
-
-# Setze MongoDB als globalen Befehl
-ENV PATH="/usr/local/mongodb/bin:${PATH}"
+# Installiere MongoDB und andere notwendige Pakete
+RUN apk add --no-cache mongodb-tools mongodb-openrc
 
 # Setze Umgebungsvariablen
 ENV MONGO_INITDB_ROOT_USERNAME=root
