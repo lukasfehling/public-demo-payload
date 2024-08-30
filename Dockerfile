@@ -34,5 +34,4 @@ COPY --from=builder /home/node/app/build ./build
 
 EXPOSE 3000
 
-CMD mongod --bind_ip 0.0.0.0 --logpath /var/log/mongod.log --dbpath /data/db --fork
-CMD ["node", "dist/server.js"]
+CMD mongod --bind_ip 0.0.0.0 --logpath /var/log/mongod.log --dbpath /data/db --fork && node dist/server.js
