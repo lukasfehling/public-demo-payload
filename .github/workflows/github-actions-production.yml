@@ -1,0 +1,33 @@
+name: Production
+on:
+    workflow_dispatch:
+    push:
+        branches: [ master ]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    build:
+
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Login to Docker registry
+              uses: docker/login-action@v2
+              with:
+                  registry: ${{ vars.REGISTRY }}
+                  username: ${{ vars.REGISTRY_USERNAME }}
+                  password: ${{ secrets.REGISTRY_PASSWORD }}
+
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v2
+              with:
+                  push: true
+                  tags: |
+                      ${{ vars.REGISTRY }}/demo/payload:latest
+                  file: ./Dockerfile
